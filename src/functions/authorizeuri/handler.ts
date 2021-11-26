@@ -16,7 +16,7 @@ const authorizeuri: Handler = async (event, context, callback) => {
     },
   };
 
-  console.log(response);
+  // console.log(response);
 
   return callback(null, response);
 };

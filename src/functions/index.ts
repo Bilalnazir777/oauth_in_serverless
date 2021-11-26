@@ -1,4 +1,5 @@
 // export { default as hello } from './hello';
-export { default as createtoken } from "./createoken";
-export { default as authorizeuri } from "./createoken";
-export { default as retrieveToken } from "./retievetoken";
+
+export { default as authorizeuri } from "./authorizeuri";
+export { default as dynamosaving } from "./dynamo";
+export { default as retrive } from "./retievetoken";

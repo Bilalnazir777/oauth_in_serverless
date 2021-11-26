@@ -1,14 +1,23 @@
 import type { AWS } from "@serverless/typescript";
 
 // import hello from "@functions/hello";
-import createoken from "@functions/createoken";
+
 import authorizeuri from "@functions/authorizeuri";
-import retrieveToken from "@functions/retievetoken";
+import dynamosaving from "@functions/dynamo";
+import retrive from "@functions/retievetoken";
 
 const serverlessConfiguration: AWS = {
   service: "quickbook-oauth-in-serverless",
   frameworkVersion: "2",
   custom: {
+    dynamodb: {
+      stages: ["dev"],
+      start: {
+        port: 8000,
+        migrate: true,
+        seed: true,
+      },
+    },
     esbuild: {
       bundle: true,
       minify: false,
@@ -19,7 +28,11 @@ const serverlessConfiguration: AWS = {
       platform: "node",
     },
   },
-  plugins: ["serverless-esbuild", "serverless-offline"],
+  plugins: [
+    "serverless-esbuild",
+    "serverless-offline",
+    "serverless-dynamodb-local",
+  ],
   provider: {
     name: "aws",
     runtime: "nodejs14.x",
@@ -33,8 +46,23 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: "20201221",
   },
+  resources: {
+    Resources: {
+      TypesciptTable: {
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          TableName: "TypescriptTable",
+          AttributeDefinitions: [
+            { AttributeName: "authCode", AttributeType: "S" },
+          ],
+          KeySchema: [{ AttributeName: "authCode", KeyType: "HASH" }],
+          BillingMode: "PAY_PER_REQUEST",
+        },
+      },
+    },
+  },
   // import the function via paths
-  functions: { createoken, authorizeuri, retrieveToken },
+  functions: { dynamosaving, authorizeuri, retrive },
 };
 
 module.exports = serverlessConfiguration;

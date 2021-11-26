@@ -31753,13 +31753,26 @@ var oauth = new import_intuit_oauth.default({
 });
 
 // src/functions/createoken/handler.ts
+var AWS = require("aws-sdk");
+var dynamodb = new AWS.DynamoDB.DocumentClient({
+  region: "localhost",
+  endpoint: "http://localhost:8000"
+});
 var createtoken = async (event) => {
-  console.log("############", event);
   const authCode = event.queryStringParameters.code;
   const path = event.path;
   const realmId = event.queryStringParameters.realmId;
   const state = event.queryStringParameters.state;
   const redirectUri = `/${path}?code=${authCode}&state=${state}&realmId=${realmId}`;
+  const newdata = {
+    authCode,
+    state,
+    realmId
+  };
+  await dynamodb.put({
+    TableName: "TypescriptTable",
+    Item: newdata
+  }).promise();
   oauth.createToken(redirectUri).then(function(authResponse) {
     console.log("The Token is  " + JSON.stringify(authResponse.getJson()));
   }).catch(function(e) {
@@ -31767,8 +31780,7 @@ var createtoken = async (event) => {
     console.error(e.intuit_tid);
   });
   return formatJSONResponse({
-    message: "token created",
-    body: {}
+    message: "token created"
   });
 };
 var main = middyfy(createtoken);

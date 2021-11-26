@@ -31741,7 +31741,7 @@ var oauth = new import_intuit_oauth.default({
   clientId: "AB9K7iPiIbJjTbfZA03qqnrKgXPGWRFOVHjYFW7a70MF3SHoAG",
   clientSecret: "YD9F7nhfwKJtFXPgZVnYznSSRjhG7vQEvh5Nateq",
   environment: "sandbox",
-  redirectUri: "http://localhost:3000/dev/createtoken"
+  redirectUri: "http://localhost:3000/dev/savingdtaa"
 });
 
 // src/functions/authorizeuri/handler.ts
@@ -31756,7 +31756,6 @@ var authorizeuri = async (event, context, callback) => {
       Location: authUri
     }
   };
-  console.log(response);
   return callback(null, response);
 };
 var main = middyfy(authorizeuri);

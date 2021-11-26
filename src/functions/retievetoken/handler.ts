@@ -1,26 +1,33 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/apiGateway";
 import { formatJSONResponse } from "@libs/apiGateway";
 import { middyfy } from "@libs/lambda";
-// import OAuthClient from "intuit-oauth";
-import { OAuthClient, oauth } from "@functions/oauth_instance";
 import schema from "./schema";
+// import { GetOne } from "../../common/dynamodb"
+import * as AWS from "aws-sdk";
+import { oauth } from "@functions/oauth_instance";
 
-const retrieveToken: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
+const dynamodb = new AWS.DynamoDB.DocumentClient({
+  region: "localhost",
+  endpoint: "http://localhost:8000",
+});
+
+const retrive: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   event
 ) => {
-  // var oauth = new OAuthClient();
-
-  oauth.createToken(event.path).then(function (authResponse) {
-    const oauth2_token_json = JSON.stringify(authResponse.getJson(), null, 2);
-    // return formatJSONResponse({
-    //   message: "token created",
-    //   body: oauth2_token_json,
-    // });
-  });
+  // const { realmId } = event.queryStringParameters;
+  const Item = await dynamodb
+    .scan({
+      TableName: "TypescriptTable",
+    })
+    .promise();
+  const redirectUri = `/savingdtaa?code=${Item.Items[0].authCode}&state=${Item.Items[0].state}&realmId=${Item.Items[0].realmId}`;
+  const result = await oauth.createToken(redirectUri);
+  const token = result.getJson();
 
   return formatJSONResponse({
-    message: "token NOT created",
+    message: "token created",
+    token: token,
   });
 };
 
-export const main = middyfy(retrieveToken);
+export const main = middyfy(retrive);

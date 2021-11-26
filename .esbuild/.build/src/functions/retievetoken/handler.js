@@ -31341,7 +31341,7 @@ var require_OAuthClient = __commonJS({
     var AuthResponse = require_AuthResponse();
     var version = require_package3();
     var Token = require_Token();
-    function OAuthClient3(config) {
+    function OAuthClient2(config) {
       this.environment = config.environment;
       this.clientId = config.clientId;
       this.clientSecret = config.clientSecret;
@@ -31366,20 +31366,20 @@ var require_OAuthClient = __commonJS({
         });
       }
     }
-    OAuthClient3.cacheId = "cacheID";
-    OAuthClient3.authorizeEndpoint = "https://appcenter.intuit.com/connect/oauth2";
-    OAuthClient3.tokenEndpoint = "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer";
-    OAuthClient3.revokeEndpoint = "https://developer.api.intuit.com/v2/oauth2/tokens/revoke";
-    OAuthClient3.userinfo_endpoint_production = "https://accounts.platform.intuit.com/v1/openid_connect/userinfo";
-    OAuthClient3.userinfo_endpoint_sandbox = "https://sandbox-accounts.platform.intuit.com/v1/openid_connect/userinfo";
-    OAuthClient3.migrate_sandbox = "https://developer-sandbox.api.intuit.com/v2/oauth2/tokens/migrate";
-    OAuthClient3.migrate_production = "https://developer.api.intuit.com/v2/oauth2/tokens/migrate";
-    OAuthClient3.environment = {
+    OAuthClient2.cacheId = "cacheID";
+    OAuthClient2.authorizeEndpoint = "https://appcenter.intuit.com/connect/oauth2";
+    OAuthClient2.tokenEndpoint = "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer";
+    OAuthClient2.revokeEndpoint = "https://developer.api.intuit.com/v2/oauth2/tokens/revoke";
+    OAuthClient2.userinfo_endpoint_production = "https://accounts.platform.intuit.com/v1/openid_connect/userinfo";
+    OAuthClient2.userinfo_endpoint_sandbox = "https://sandbox-accounts.platform.intuit.com/v1/openid_connect/userinfo";
+    OAuthClient2.migrate_sandbox = "https://developer-sandbox.api.intuit.com/v2/oauth2/tokens/migrate";
+    OAuthClient2.migrate_production = "https://developer.api.intuit.com/v2/oauth2/tokens/migrate";
+    OAuthClient2.environment = {
       sandbox: "https://sandbox-quickbooks.api.intuit.com/",
       production: "https://quickbooks.api.intuit.com/"
     };
-    OAuthClient3.jwks_uri = "https://oauth.platform.intuit.com/op/v1/jwks";
-    OAuthClient3.scopes = {
+    OAuthClient2.jwks_uri = "https://oauth.platform.intuit.com/op/v1/jwks";
+    OAuthClient2.scopes = {
       Accounting: "com.intuit.quickbooks.accounting",
       Payment: "com.intuit.quickbooks.payment",
       Payroll: "com.intuit.quickbooks.payroll",
@@ -31392,22 +31392,22 @@ var require_OAuthClient = __commonJS({
       OpenId: "openid",
       Intuit_name: "intuit_name"
     };
-    OAuthClient3.user_agent = `Intuit-OAuthClient-JS_${version.version}_${os.type()}_${os.release()}_${os.platform()}`;
-    OAuthClient3.prototype.setAuthorizeURLs = function setAuthorizeURLs(params) {
+    OAuthClient2.user_agent = `Intuit-OAuthClient-JS_${version.version}_${os.type()}_${os.release()}_${os.platform()}`;
+    OAuthClient2.prototype.setAuthorizeURLs = function setAuthorizeURLs(params) {
       if (!params) {
         throw new Error("Provide the custom authorize URL's");
       }
-      OAuthClient3.authorizeEndpoint = params.authorizeEndpoint;
-      OAuthClient3.tokenEndpoint = params.tokenEndpoint;
-      OAuthClient3.revokeEndpoint = params.revokeEndpoint;
-      this.environment === "sandbox" ? OAuthClient3.userinfo_endpoint_sandbox = params.userInfoEndpoint : OAuthClient3.userinfo_endpoint_production = params.userInfoEndpoint;
+      OAuthClient2.authorizeEndpoint = params.authorizeEndpoint;
+      OAuthClient2.tokenEndpoint = params.tokenEndpoint;
+      OAuthClient2.revokeEndpoint = params.revokeEndpoint;
+      this.environment === "sandbox" ? OAuthClient2.userinfo_endpoint_sandbox = params.userInfoEndpoint : OAuthClient2.userinfo_endpoint_production = params.userInfoEndpoint;
       return this;
     };
-    OAuthClient3.prototype.authorizeUri = function authorizeUri(params) {
+    OAuthClient2.prototype.authorizeUri = function authorizeUri(params) {
       params = params || {};
       if (!params.scope)
         throw new Error("Provide the scopes");
-      const authUri = `${OAuthClient3.authorizeEndpoint}?${queryString.stringify({
+      const authUri = `${OAuthClient2.authorizeEndpoint}?${queryString.stringify({
         response_type: "code",
         redirect_uri: this.redirectUri,
         client_id: this.clientId,
@@ -31417,7 +31417,7 @@ var require_OAuthClient = __commonJS({
       this.log("info", "The Authorize Uri is :", authUri);
       return authUri;
     };
-    OAuthClient3.prototype.createToken = function createToken(uri) {
+    OAuthClient2.prototype.createToken = function createToken(uri) {
       return new Promise((resolve) => {
         if (!uri)
           throw new Error("Provide the Uri");
@@ -31432,14 +31432,14 @@ var require_OAuthClient = __commonJS({
           body.redirect_uri = params.redirectUri || this.redirectUri;
         }
         const request = {
-          url: OAuthClient3.tokenEndpoint,
+          url: OAuthClient2.tokenEndpoint,
           body,
           method: "POST",
           headers: {
             Authorization: `Basic ${this.authHeader()}`,
             "Content-Type": AuthResponse._urlencodedContentType,
             Accept: AuthResponse._jsonContentType,
-            "User-Agent": OAuthClient3.user_agent
+            "User-Agent": OAuthClient2.user_agent
           }
         };
         resolve(this.getTokenRequest(request));
@@ -31454,21 +31454,21 @@ var require_OAuthClient = __commonJS({
         throw e;
       });
     };
-    OAuthClient3.prototype.refresh = function refresh() {
+    OAuthClient2.prototype.refresh = function refresh() {
       return new Promise((resolve) => {
         this.validateToken();
         const body = {};
         body.grant_type = "refresh_token";
         body.refresh_token = this.getToken().refresh_token;
         const request = {
-          url: OAuthClient3.tokenEndpoint,
+          url: OAuthClient2.tokenEndpoint,
           body,
           method: "POST",
           headers: {
             Authorization: `Basic ${this.authHeader()}`,
             "Content-Type": AuthResponse._urlencodedContentType,
             Accept: AuthResponse._jsonContentType,
-            "User-Agent": OAuthClient3.user_agent
+            "User-Agent": OAuthClient2.user_agent
           }
         };
         resolve(this.getTokenRequest(request));
@@ -31483,7 +31483,7 @@ var require_OAuthClient = __commonJS({
         throw e;
       });
     };
-    OAuthClient3.prototype.refreshUsingToken = function refreshUsingToken(refresh_token) {
+    OAuthClient2.prototype.refreshUsingToken = function refreshUsingToken(refresh_token) {
       return new Promise((resolve) => {
         if (!refresh_token)
           throw new Error("The Refresh token is missing");
@@ -31491,14 +31491,14 @@ var require_OAuthClient = __commonJS({
         body.grant_type = "refresh_token";
         body.refresh_token = refresh_token;
         const request = {
-          url: OAuthClient3.tokenEndpoint,
+          url: OAuthClient2.tokenEndpoint,
           body,
           method: "POST",
           headers: {
             Authorization: `Basic ${this.authHeader()}`,
             "Content-Type": AuthResponse._urlencodedContentType,
             Accept: AuthResponse._jsonContentType,
-            "User-Agent": OAuthClient3.user_agent
+            "User-Agent": OAuthClient2.user_agent
           }
         };
         resolve(this.getTokenRequest(request));
@@ -31513,20 +31513,20 @@ var require_OAuthClient = __commonJS({
         throw e;
       });
     };
-    OAuthClient3.prototype.revoke = function revoke(params) {
+    OAuthClient2.prototype.revoke = function revoke(params) {
       return new Promise((resolve) => {
         params = params || {};
         const body = {};
         body.token = params.access_token || params.refresh_token || (this.getToken().isAccessTokenValid() ? this.getToken().access_token : this.getToken().refresh_token);
         const request = {
-          url: OAuthClient3.revokeEndpoint,
+          url: OAuthClient2.revokeEndpoint,
           body,
           method: "POST",
           headers: {
             Authorization: `Basic ${this.authHeader()}`,
             Accept: AuthResponse._jsonContentType,
             "Content-Type": AuthResponse._jsonContentType,
-            "User-Agent": OAuthClient3.user_agent
+            "User-Agent": OAuthClient2.user_agent
           }
         };
         resolve(this.getTokenRequest(request));
@@ -31539,15 +31539,15 @@ var require_OAuthClient = __commonJS({
         throw e;
       });
     };
-    OAuthClient3.prototype.getUserInfo = function getUserInfo() {
+    OAuthClient2.prototype.getUserInfo = function getUserInfo() {
       return new Promise((resolve) => {
         const request = {
-          url: this.environment === "sandbox" ? OAuthClient3.userinfo_endpoint_sandbox : OAuthClient3.userinfo_endpoint_production,
+          url: this.environment === "sandbox" ? OAuthClient2.userinfo_endpoint_sandbox : OAuthClient2.userinfo_endpoint_production,
           method: "GET",
           headers: {
             Authorization: `Bearer ${this.token.access_token}`,
             Accept: AuthResponse._jsonContentType,
-            "User-Agent": OAuthClient3.user_agent
+            "User-Agent": OAuthClient2.user_agent
           }
         };
         resolve(this.getTokenRequest(request));
@@ -31560,18 +31560,18 @@ var require_OAuthClient = __commonJS({
         throw e;
       });
     };
-    OAuthClient3.prototype.makeApiCall = function makeApiCall(params) {
+    OAuthClient2.prototype.makeApiCall = function makeApiCall(params) {
       return new Promise((resolve) => {
         params = params || {};
         const transport = params.transport ? params.transport : popsicle.createTransport({ type: "text" });
         const headers = params.headers && typeof params.headers === "object" ? Object.assign({}, {
           Authorization: `Bearer ${this.getToken().access_token}`,
           Accept: AuthResponse._jsonContentType,
-          "User-Agent": OAuthClient3.user_agent
+          "User-Agent": OAuthClient2.user_agent
         }, params.headers) : Object.assign({}, {
           Authorization: `Bearer ${this.getToken().access_token}`,
           Accept: AuthResponse._jsonContentType,
-          "User-Agent": OAuthClient3.user_agent
+          "User-Agent": OAuthClient2.user_agent
         });
         const request = {
           url: params.url,
@@ -31589,7 +31589,7 @@ var require_OAuthClient = __commonJS({
         throw e;
       });
     };
-    OAuthClient3.prototype.validateIdToken = function validateIdToken(params = {}) {
+    OAuthClient2.prototype.validateIdToken = function validateIdToken(params = {}) {
       return new Promise((resolve) => {
         if (!this.getToken().id_token)
           throw new Error("The bearer token does not have id_token");
@@ -31604,11 +31604,11 @@ var require_OAuthClient = __commonJS({
         if (id_token_payload.exp < Date.now() / 1e3)
           return false;
         const request = {
-          url: OAuthClient3.jwks_uri,
+          url: OAuthClient2.jwks_uri,
           method: "GET",
           headers: {
             Accept: AuthResponse._jsonContentType,
-            "User-Agent": OAuthClient3.user_agent
+            "User-Agent": OAuthClient2.user_agent
           }
         };
         return resolve(this.getKeyFromJWKsURI(id_token, id_token_header.kid, request));
@@ -31622,7 +31622,7 @@ var require_OAuthClient = __commonJS({
         throw e;
       });
     };
-    OAuthClient3.prototype.getKeyFromJWKsURI = function getKeyFromJWKsURI(id_token, kid, request) {
+    OAuthClient2.prototype.getKeyFromJWKsURI = function getKeyFromJWKsURI(id_token, kid, request) {
       return new Promise((resolve) => {
         resolve(this.loadResponse(request));
       }).then((response) => {
@@ -31638,12 +31638,12 @@ var require_OAuthClient = __commonJS({
         throw e;
       });
     };
-    OAuthClient3.prototype.getPublicKey = function getPublicKey(modulus, exponent) {
+    OAuthClient2.prototype.getPublicKey = function getPublicKey(modulus, exponent) {
       const getPem = require_rsa_pem_from_mod_exp();
       const pem = getPem(modulus, exponent);
       return pem;
     };
-    OAuthClient3.prototype.getTokenRequest = function getTokenRequest(request) {
+    OAuthClient2.prototype.getTokenRequest = function getTokenRequest(request) {
       const authResponse = new AuthResponse({
         token: this.token
       });
@@ -31660,19 +31660,19 @@ var require_OAuthClient = __commonJS({
         throw e;
       });
     };
-    OAuthClient3.prototype.validateToken = function validateToken() {
+    OAuthClient2.prototype.validateToken = function validateToken() {
       if (!this.token.refreshToken())
         throw new Error("The Refresh token is missing");
       if (!this.token.isRefreshTokenValid())
         throw new Error("The Refresh token is invalid, please Authorize again.");
     };
-    OAuthClient3.prototype.loadResponse = function loadResponse(request) {
+    OAuthClient2.prototype.loadResponse = function loadResponse(request) {
       return popsicle.get(request).then((response) => response);
     };
-    OAuthClient3.prototype.loadResponseFromJWKsURI = function loadResponseFromJWKsURI(request) {
+    OAuthClient2.prototype.loadResponseFromJWKsURI = function loadResponseFromJWKsURI(request) {
       return popsicle.get(request).then((response) => response);
     };
-    OAuthClient3.prototype.createError = function createError(e, authResponse) {
+    OAuthClient2.prototype.createError = function createError(e, authResponse) {
       if (!authResponse || authResponse.body === "") {
         e.error = authResponse && authResponse.response.statusText || e.message || "";
         e.authResponse = authResponse || "";
@@ -31700,26 +31700,26 @@ var require_OAuthClient = __commonJS({
       e.intuit_tid = authResponse.headers().intuit_tid;
       return e;
     };
-    OAuthClient3.prototype.isAccessTokenValid = function isAccessTokenValid() {
+    OAuthClient2.prototype.isAccessTokenValid = function isAccessTokenValid() {
       return this.token.isAccessTokenValid();
     };
-    OAuthClient3.prototype.getToken = function getToken() {
+    OAuthClient2.prototype.getToken = function getToken() {
       return this.token;
     };
-    OAuthClient3.prototype.setToken = function setToken(params) {
+    OAuthClient2.prototype.setToken = function setToken(params) {
       this.token = new Token(params);
       return this.token;
     };
-    OAuthClient3.prototype.authHeader = function authHeader() {
+    OAuthClient2.prototype.authHeader = function authHeader() {
       const apiKey = `${this.clientId}:${this.clientSecret}`;
       return typeof btoa === "function" ? btoa(apiKey) : Buffer.from(apiKey).toString("base64");
     };
-    OAuthClient3.prototype.log = function log2(level, message2, messageData) {
+    OAuthClient2.prototype.log = function log2(level, message2, messageData) {
       if (this.logging) {
         this.logger.log(level, message2 + messageData);
       }
     };
-    module2.exports = OAuthClient3;
+    module2.exports = OAuthClient2;
   }
 });
 
@@ -31743,25 +31743,36 @@ var middyfy = (handler) => {
   return (0, import_core.default)(handler).use((0, import_http_json_body_parser.default)());
 };
 
+// src/functions/retievetoken/handler.ts
+var AWS = __toModule(require("aws-sdk"));
+
 // src/functions/oauth_instance.ts
 var import_intuit_oauth = __toModule(require_OAuthClient());
 var oauth = new import_intuit_oauth.default({
   clientId: "AB9K7iPiIbJjTbfZA03qqnrKgXPGWRFOVHjYFW7a70MF3SHoAG",
   clientSecret: "YD9F7nhfwKJtFXPgZVnYznSSRjhG7vQEvh5Nateq",
   environment: "sandbox",
-  redirectUri: "http://localhost:3000/dev/createtoken"
+  redirectUri: "http://localhost:3000/dev/savingdtaa"
 });
 
 // src/functions/retievetoken/handler.ts
-var retrieveToken = async (event) => {
-  oauth.createToken(event.path).then(function(authResponse) {
-    const oauth2_token_json = JSON.stringify(authResponse.getJson(), null, 2);
-  });
+var dynamodb = new AWS.DynamoDB.DocumentClient({
+  region: "localhost",
+  endpoint: "http://localhost:8000"
+});
+var retrive = async (event) => {
+  const Item = await dynamodb.scan({
+    TableName: "TypescriptTable"
+  }).promise();
+  const redirectUri = `/savingdtaa?code=${Item.Items[0].authCode}&state=${Item.Items[0].state}&realmId=${Item.Items[0].realmId}`;
+  const result = await oauth.createToken(redirectUri);
+  const token = result.getJson();
   return formatJSONResponse({
-    message: "token NOT created"
+    message: "token created",
+    token
   });
 };
-var main = middyfy(retrieveToken);
+var main = middyfy(retrive);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   main

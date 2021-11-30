@@ -31725,7 +31725,8 @@ var require_OAuthClient = __commonJS({
 
 // src/functions/retievetoken/handler.ts
 __export(exports, {
-  main: () => main
+  main: () => main,
+  retrive: () => retrive
 });
 
 // src/libs/apiGateway.ts
@@ -31775,7 +31776,8 @@ var retrive = async (event) => {
 var main = middyfy(retrive);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  main
+  main,
+  retrive
 });
 /*!
  * Copyright (c) 2015, Salesforce.com, Inc.

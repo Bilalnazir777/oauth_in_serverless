@@ -1218,14 +1218,6 @@ __export(exports, {
   main: () => main
 });
 
-// src/libs/apiGateway.ts
-var formatJSONResponse = (response) => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(response)
-  };
-};
-
 // src/libs/lambda.ts
 var import_core = __toModule(require_core());
 var import_http_json_body_parser = __toModule(require_http_json_body_parser());
@@ -1239,7 +1231,7 @@ var dynamodb = new AWS.DynamoDB.DocumentClient({
   region: "localhost",
   endpoint: "http://localhost:8000"
 });
-var dynamosaving = async (event) => {
+var dynamosaving = async (event, context, callback) => {
   const authCode = event.queryStringParameters.code;
   const realmId = event.queryStringParameters.realmId;
   const state = event.queryStringParameters.state;
@@ -1252,9 +1244,13 @@ var dynamosaving = async (event) => {
     TableName: "TypescriptTable",
     Item: newdata
   }).promise();
-  return formatJSONResponse({
-    message: "token created"
-  });
+  const response = {
+    statusCode: 301,
+    headers: {
+      Location: "http://localhost:3000/dev/retrieveToken"
+    }
+  };
+  return callback(null, response);
 };
 var main = middyfy(dynamosaving);
 // Annotate the CommonJS export names for ESM import in node:

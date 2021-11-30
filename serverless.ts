@@ -5,6 +5,10 @@ import type { AWS } from "@serverless/typescript";
 import authorizeuri from "@functions/authorizeuri";
 import dynamosaving from "@functions/dynamo";
 import retrive from "@functions/retievetoken";
+import createAccount from "@functions/createAccount";
+import readAccount from "@functions/readAccount";
+import queryaccount from "@functions/queryaccount";
+import updateaccount from "@functions/updateaccount";
 
 const serverlessConfiguration: AWS = {
   service: "quickbook-oauth-in-serverless",
@@ -62,7 +66,15 @@ const serverlessConfiguration: AWS = {
     },
   },
   // import the function via paths
-  functions: { dynamosaving, authorizeuri, retrive },
+  functions: {
+    dynamosaving,
+    authorizeuri,
+    retrive,
+    createAccount,
+    readAccount,
+    queryaccount,
+    updateaccount,
+  },
 };
 
 module.exports = serverlessConfiguration;

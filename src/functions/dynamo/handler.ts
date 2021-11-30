@@ -1,9 +1,10 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/apiGateway";
-import { formatJSONResponse } from "@libs/apiGateway";
+// import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/apiGateway";
+// import { formatJSONResponse } from "@libs/apiGateway";
 import { middyfy } from "@libs/lambda";
+import { Handler } from "aws-lambda";
 // import OAuthClient from "intuit-oauth";
-import { oauth } from "@functions/oauth_instance";
-import schema from "./schema";
+// import { oauth } from "@functions/oauth_instance";/
+// import schema from "./schema";
 const AWS = require("aws-sdk");
 
 const dynamodb = new AWS.DynamoDB.DocumentClient({
@@ -11,9 +12,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient({
   endpoint: "http://localhost:8000",
 });
 
-const dynamosaving: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
-  event
-) => {
+const dynamosaving: Handler = async (event, context, callback) => {
   // console.log("############", event);
   const authCode = event.queryStringParameters.code;
 
@@ -48,9 +47,17 @@ const dynamosaving: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   //     console.error(e.intuit_tid);
   //   });
 
-  return formatJSONResponse({
-    message: "token created",
-  });
+  const response = {
+    statusCode: 301,
+
+    headers: {
+      Location: "http://localhost:3000/dev/retrieveToken",
+    },
+  };
+
+  // console.log(response);
+
+  return callback(null, response);
 };
 
 export const main = middyfy(dynamosaving);
